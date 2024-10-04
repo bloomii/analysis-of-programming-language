@@ -1,0 +1,7 @@
+run = [
+  'cd ./week1',
+  'javac ./wordCount.java',
+  'java ./wordCount ../pride-and-prejudice.txt',
+]
+modules = ["java-graalvm22.3"]
+[nix]
