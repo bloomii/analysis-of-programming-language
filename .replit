@@ -1,7 +1,8 @@
-run = [
-  'cd ./week1',
-  'javac ./wordCount.java',
-  'java ./wordCount ../pride-and-prejudice.txt',
-]
+# run = [
+#   'cd ./week1',
+#   'javac ./wordCount.java',
+#   'java ./wordCount ../pride-and-prejudice.txt',
+# ]
+run = "dafny ./week5/TermFrequency.dfy"
 modules = ["java-graalvm22.3"]
 [nix]
