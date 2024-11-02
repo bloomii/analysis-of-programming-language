@@ -4,6 +4,7 @@ Here is
 -   __TwentyOne.java__ which is a Java language implementations and add error detection and handling in the required [style 21](https://github.com/crista/exercises-in-programming-style/blob/master/21-constructivist/README.md).
 -   __TwentyTwo.java__ which is a Java language implementations and add error detection and handling in the required [style 22](https://github.com/crista/exercises-in-programming-style/blob/master/22-tantrum/README.md).
 -   __TwentyFive.java__ which is a Java language implementations and add error detection and handling in the required [style 25](https://github.com/crista/exercises-in-programming-style/blob/master/25-quarantine/README.md).
+-   __TermFrequenxy.dfy__ which is a dafny language implementations.
 
 ### How to run these code
 #### run TwentyOne.java
@@ -48,6 +49,16 @@ java TwentyFive ../pride-and-prejudice.txt | diff - ../correct_output.txt
 ```
 it is correct if there is no output else incorrect.
 
+#### valify TermFrequency.dfy
+```bash
+cd ./week5
+dafny TermFrequency.dfy
+```
+#### valify&run TermFrequency.dfy
+```bash
+cd ./week5
+dafny /compile:3 TermFrequency.dfy
+```
 ### In the end
 In the end, please run *rm* to remove class
 ```bash
