@@ -7,7 +7,6 @@ import java.util.*;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 class Column{
     public Object value;
@@ -68,7 +67,7 @@ public class TwentySeven {
 
             allWords.value= Arrays.stream(words).toList();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
 
         Set<String> stopWordsList=new HashSet<>();
@@ -81,11 +80,30 @@ public class TwentySeven {
                 stopWordsList.add(String.valueOf(c));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         stopWords.value=stopWordsList;
         update(columns);
         List<Map.Entry<String, Integer>> list=(List<Map.Entry<String, Integer>>)sortedData.value;
+        for (int i = 0; i < list.size()&&i<25; i++) {
+            System.out.println(list.get(i).getKey() + "  -  " + list.get(i).getValue());
+        }
+        System.out.println("Enter new name of file of words:");
+        Scanner scanner=new Scanner(System.in);
+        String file=scanner.nextLine();
+        try {
+            String fileText=new String(Files.readAllBytes(Paths.get(file)));
+            Pattern pattern = Pattern.compile("[\\W_]+");
+            Matcher matcher = pattern.matcher(fileText);
+            String[] words = matcher.replaceAll(" ").toLowerCase().trim().split("\\s+");
+
+            allWords.value= Arrays.stream(words).toList();
+        } catch (IOException e) {
+            allWords.value=new ArrayList<>();
+            System.out.println(e);
+        }
+        update(columns);
+        list=(List<Map.Entry<String, Integer>>)sortedData.value;
         for (int i = 0; i < list.size()&&i<25; i++) {
             System.out.println(list.get(i).getKey() + "  -  " + list.get(i).getValue());
         }

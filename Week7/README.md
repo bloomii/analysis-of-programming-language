@@ -10,12 +10,6 @@ Here is
 cd ./Week7
 javac TwentySeven.java && java TwentySeven ../pride-and-prejudice.txt
 ```
-if you want to test the __TwentySeven.java__, you can run code by there command:
-```bash
-cd ./Week7
-javac TwentySeven.java && java TwentySeven ../pride-and-prejudice.txt | diff - ../correct_output.txt
-```
-it is correct if there is no output else incorrect.
 
 #### run TwentyEight.java
 ```bash

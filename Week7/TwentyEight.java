@@ -1,6 +1,5 @@
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Function;
@@ -8,18 +7,19 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class TwentyEight {
-    public static Stream<String> characters(String filePath) throws IOException {
+    public static Stream<String> lines(String filePath) throws IOException {
         return Files.lines(Paths.get(filePath))
-                .map(line->line.toLowerCase().trim()+"\n")
-                .flatMapToInt(String::chars)  // Convert each line to a stream of integers (Unicode values of characters)
-                .mapToObj(c -> String.valueOf((char) c));  // Convert each integer back to a character (String)
+                .map(line->line.toLowerCase().trim()+"\n");
+
     }
     public static Stream<String> allWords(String filePath) throws IOException {
         return Arrays.stream(
-                  characters(filePath)
-                    .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)  // Collect characters into words
-                    .toString()
-                    .split("[^a-z]")  // Split the string by non-word characters
+                        lines(filePath)
+                          .flatMapToInt(String::chars)  // Convert each line to a stream of integers (Unicode values of characters)
+                          .mapToObj(c -> String.valueOf((char) c)) // Convert each integer back to a character (String)
+                            .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)  // Collect characters into words
+                            .toString()
+                            .split("[^a-z]")  // Split the string by non-word characters
                 )
                 .filter(word -> !word.isEmpty());  // Filter out empty words
     }
@@ -55,7 +55,7 @@ public class TwentyEight {
         }
         String filePath=args[0];
 //        String filePath="../pride-and-prejudice.txt";
-        
+
         countAndSort(filePath);
     }
 }
