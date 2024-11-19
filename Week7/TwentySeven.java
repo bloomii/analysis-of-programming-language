@@ -67,7 +67,8 @@ public class TwentySeven {
 
             allWords.value= Arrays.stream(words).toList();
         } catch (IOException e) {
-            System.out.println(e);
+            allWords.value=new ArrayList<>();
+//            System.out.println(e);
         }
 
         Set<String> stopWordsList=new HashSet<>();
@@ -96,10 +97,12 @@ public class TwentySeven {
             Pattern pattern = Pattern.compile("[\\W_]+");
             Matcher matcher = pattern.matcher(fileText);
             String[] words = matcher.replaceAll(" ").toLowerCase().trim().split("\\s+");
+            List<String> newAllWords=new ArrayList<>();
+            newAllWords.addAll((List<String>)allWords.value);
 
-            allWords.value= Arrays.stream(words).toList();
-        } catch (IOException e) {
-            allWords.value=new ArrayList<>();
+            newAllWords.addAll(Arrays.stream(words).toList());
+            allWords.value=newAllWords;
+        } catch (Exception e) {
             System.out.println(e);
         }
         update(columns);

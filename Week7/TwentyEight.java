@@ -1,33 +1,39 @@
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class TwentyEight {
     public static Stream<String> lines(String filePath) throws IOException {
         return Files.lines(Paths.get(filePath))
-                .map(line->line.toLowerCase().trim()+"\n");
+                .map(line->line.toLowerCase());
 
     }
     public static Stream<String> allWords(String filePath) throws IOException {
-        return Arrays.stream(
-                        lines(filePath)
-                          .flatMapToInt(String::chars)  // Convert each line to a stream of integers (Unicode values of characters)
-                          .mapToObj(c -> String.valueOf((char) c)) // Convert each integer back to a character (String)
-                            .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)  // Collect characters into words
-                            .toString()
-                            .split("[^a-z]")  // Split the string by non-word characters
-                )
+        return
+            lines(filePath)
+                .flatMap(line -> {
+                    Pattern WORD_PATTERN = Pattern.compile("[a-z]{2,}");
+                    Matcher matcher = WORD_PATTERN.matcher(line);
+                    Stream.Builder<String> wordStreamBuilder = Stream.builder();
+                    while (matcher.find()) {
+                        wordStreamBuilder.add(matcher.group().trim());
+                    }
+                    return wordStreamBuilder.build();
+                })
                 .filter(word -> !word.isEmpty());  // Filter out empty words
     }
     public static Stream<String> nonStopWords(String filePath) throws IOException {
         Set<String> stopWords=new HashSet<>();
         List<String> lines = Files.readAllLines(Paths.get("../stop_words.txt"));
         for (String line : lines) {
-            String[] words = line.trim().split("[,\\s]+");
+            String[] words = line.trim().split(",");
             stopWords.addAll(Arrays.asList(words));
         }
         for(char c='a';c<='z';c++){
@@ -37,15 +43,19 @@ public class TwentyEight {
                 .filter(word -> !stopWords.contains(word));  // Filter out stopWords
     }
 
-    public static void countAndSort(String filePath) throws IOException {
-        Map<String, Long> wordCounts = nonStopWords(filePath)
-                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));  // Count occurrences
-
-        // Sort the words by frequency in descending order and print top 25
-        wordCounts.entrySet().stream()
-                .sorted((entry1, entry2) -> Long.compare(entry2.getValue(), entry1.getValue()))  // Sort by frequency
-                .limit(25)  // Get the top 25 most frequent words
-                .forEach(entry -> System.out.println(entry.getKey() + "  -  " + entry.getValue()));
+    public static Stream<List<Map.Entry<String,Integer>>> countAndSort(String filePath) throws IOException {
+        Map<String,Integer> wordFrequency=new HashMap<>();
+        int[] i={1};
+        Stream.Builder<List<Map.Entry<String,Integer>>> list = Stream.builder();
+        nonStopWords(filePath).forEach((w)->{
+            wordFrequency.put(w, wordFrequency.getOrDefault(w,0)+1);
+            if(i[0]%5000==0){
+                list.add(wordFrequency.entrySet().stream()
+                        .sorted((entry1, entry2) -> Long.compare(entry2.getValue(), entry1.getValue())).toList());
+            }
+            i[0]++;
+        });
+        return list.build();
     }
 
     public static void main(String[] args) throws IOException {
@@ -56,6 +66,11 @@ public class TwentyEight {
         String filePath=args[0];
 //        String filePath="../pride-and-prejudice.txt";
 
-        countAndSort(filePath);
+        countAndSort(filePath).forEach(s->{
+            System.out.println("-----------------------------------------");
+            for(int i=0;i<25&&i<s.size();i++){
+                System.out.println(s.get(i).getKey() + "  -  " + s.get(i).getValue());
+            }
+        });
     }
 }
