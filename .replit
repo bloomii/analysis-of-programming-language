@@ -3,6 +3,7 @@
 #   'javac ./wordCount.java',
 #   'java ./wordCount ../pride-and-prejudice.txt',
 # ]
-run = "dafny ./week5/TermFrequency.dfy"
-modules = ["java-graalvm22.3"]
+# run = "dafny ./week5/TermFrequency.dfy"
+run = ["cd Week9", "python Three.py ../pride-and-prejudice.txt"]
+# modules = ["java-graalvm22.3"]
 [nix]
