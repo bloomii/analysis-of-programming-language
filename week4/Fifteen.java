@@ -128,12 +128,37 @@ class WordFrequencyCounter{
         }
     }
 }
+// New class to count non-stop words containing 'z'
+class WordWithZCounter implements Consumer<String>{
+    private int count = 0;
+
+    public WordWithZCounter(WordFrequencyFramework wfApp, DataStorage dataStorage) {
+        dataStorage.register4WorkEvent(this);
+        wfApp.register4EndEvent(this::printZCount);
+    }
+    private void printZCount() {
+        System.out.println("Number of non-stop words containing 'z': " + count);
+    }
+
+    /**
+     * Performs this operation on the given argument.
+     *
+     * @param s the input argument
+     */
+    @Override
+    public void accept(String word) {
+        if (word.contains("z")) {
+            count++;
+        }
+    }
+}
 public class Fifteen {
     public static void main(String[] args){
         WordFrequencyFramework wordFrequencyFramework=new WordFrequencyFramework();
         StopWordFilter stopWordFilter=new StopWordFilter(wordFrequencyFramework);
         DataStorage dataStorage=new DataStorage(wordFrequencyFramework,stopWordFilter);
         WordFrequencyCounter wordFrequencyCounter=new WordFrequencyCounter(wordFrequencyFramework,dataStorage);
+        WordWithZCounter wordWithZCounter = new WordWithZCounter(wordFrequencyFramework, dataStorage);
 //        wordFrequencyFramework.run("../pride-and-prejudice.txt");
         wordFrequencyFramework.run(args[0]);
     }

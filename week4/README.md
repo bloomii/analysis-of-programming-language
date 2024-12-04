@@ -40,13 +40,6 @@ cd ./week4
 javac Fifteen.java
 java Fifteen ../pride-and-prejudice.txt
 ```
-if you want to test the __Fifteen.java__, you can run code by there command:
-```bash
-cd ./week4
-javac Fifteen.java
-java Fifteen ../pride-and-prejudice.txt | diff - ../correct_output.txt
-```
-it is correct if there is no output else incorrect.
 
 ### In the end
 In the end, please run *rm* to remove class

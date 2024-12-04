@@ -69,19 +69,26 @@ public class Thirteen {
             list.sort((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
             return list;
         });
+        wordFrequencyObj.put("top25",(Runnable)()->{
+            List<Map.Entry<String, Integer>> list=((Supplier<List<Map.Entry<String, Integer>>>)(wordFrequencyObj.get("sorted"))).get();
+            for (int i=0;i<25&&i< list.size();i++) {
+                System.out.println(list.get(i).getKey() + "  -  " + list.get(i).getValue());
+            }
+        });
 
-        // ((Consumer<String>)(dataStorageObj.get("init"))).accept("../pride-and-prejudice.txt");
-       ((Consumer<String>)(dataStorageObj.get("init"))).accept(args[0]);
+//        ((Consumer<String>)(dataStorageObj.get("init"))).accept("../pride-and-prejudice.txt");
+        ((Consumer<String>)(dataStorageObj.get("init"))).accept(args[0]);
         ((Runnable)(stopWordsObj.get("init"))).run();
         for(String word:((Supplier<String[]>)(dataStorageObj.get("words"))).get()) {
             if(!((Function<String,Boolean>)(stopWordsObj.get("is_stop_word"))).apply(word)){
                 ((Consumer<String>)(wordFrequencyObj.get("increment_count"))).accept(word);
             }
         }
-        List<Map.Entry<String, Integer>> list=((Supplier<List<Map.Entry<String, Integer>>>)(wordFrequencyObj.get("sorted"))).get();
-        for (int i=0;i<25&&i< list.size();i++) {
-            System.out.println(list.get(i).getKey() + "  -  " + list.get(i).getValue());
-        }
+        ((Runnable)wordFrequencyObj.get("top25")).run();
+//        List<Map.Entry<String, Integer>> list=((Supplier<List<Map.Entry<String, Integer>>>)(wordFrequencyObj.get("sorted"))).get();
+//        for (int i=0;i<25&&i< list.size();i++) {
+//            System.out.println(list.get(i).getKey() + "  -  " + list.get(i).getValue());
+//        }
     }
 
 

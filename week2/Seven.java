@@ -1,57 +1,17 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Seven {
-    public static void main(String[] args) {
-        String filePath = args[0];
-//        String filePath = "../pride-and-prejudice.txt";
-        Set<String> stopWords = loadStopWords("../stop_words.txt");
-        Map<String, Integer> wordCount = new HashMap<>();
-
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(filePath));
-            String line;
-            Pattern pattern = Pattern.compile("[a-z]{2,}");
-
-            while ((line = reader.readLine()) != null) {
-                Matcher matcher = pattern.matcher(line.toLowerCase());
-                while (matcher.find()) {
-                    String word = matcher.group();
-                    if (!stopWords.contains(word)) {
-                        wordCount.put(word, wordCount.getOrDefault(word, 0) + 1);
-                    }
-                }
-            }
-            reader.close();
-
-            // Get the top 25 words
-            List<Map.Entry<String, Integer>> wordList = new ArrayList<>(wordCount.entrySet());
-            wordList.sort((a, b) -> b.getValue().compareTo(a.getValue()));
-
-            // Print the top 25 words
-            for (int i = 0; i < Math.min(25, wordList.size()); i++) {
-                Map.Entry<String, Integer> entry = wordList.get(i);
-                System.out.println(entry.getKey() + "  -  " + entry.getValue());
-            }
-        } catch (IOException e) {
-            System.err.println("Error reading file: " + e.getMessage());
-        }
-    }
-    private static Set<String> loadStopWords(String filePath) {
-        Set<String> stopWords = new HashSet<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] words = line.split(",");
-                Collections.addAll(stopWords, words);
-            }
-        } catch (IOException e) {
-            System.err.println("Error reading stop words file: " + e.getMessage());
-        }
-        return stopWords;
+    public static void main(String[] args) throws IOException {
+        List<String> stopWords=Arrays.asList((new String(Files.readAllBytes(Paths.get("../stop_words.txt")))+",a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z").split(","));
+        Arrays.stream(Pattern.compile("[\\W_]+").matcher(new String(Files.readAllBytes(Paths.get(args[0])))).replaceAll(" ").toLowerCase().trim().split("\\s+")).filter(word -> !stopWords.contains(word)).collect(Collectors.toMap(Function.identity(), word -> 1, Integer::sum)).entrySet().stream().sorted(Map.Entry.<String, Integer>comparingByValue().reversed()).limit(25).forEach(entry-> System.out.println(entry.getKey()+"  -  "+entry.getValue()));
     }
 }
