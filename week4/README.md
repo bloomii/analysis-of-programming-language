@@ -4,6 +4,7 @@ Here is
 -   __Twelve.java__ which is a Java language implementation of [tf-12.py](https://github.com/crista/exercises-in-programming-style/blob/master/12-letterbox/tf-12.py)
 -   __Thirteen.java__ which is a Java language implementation of [tf-13.py](https://github.com/crista/exercises-in-programming-style/blob/master/13-closed-maps/tf-13.py)
 -   __Fifteen.java__ which is a Java language implementation of [tf-15.py](https://github.com/crista/exercises-in-programming-style/blob/master/15-hollywood/tf-15.py)
+-   __Sixteen.java__ which is a Java language implementation of [tf-16.py](https://github.com/crista/exercises-in-programming-style/blob/master/16-bulletin-board/tf-16.py)
 
 ### How to run these code
 #### run Twelve.java
@@ -39,6 +40,13 @@ it is correct if there is no output else incorrect.
 cd ./week4
 javac Fifteen.java
 java Fifteen ../pride-and-prejudice.txt
+```
+
+#### run Sixteen.java
+```bash
+cd ./week4
+javac Sixteen.java
+java Sixteen ../pride-and-prejudice.txt
 ```
 
 ### In the end
